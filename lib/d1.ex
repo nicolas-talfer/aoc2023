@@ -15,40 +15,34 @@ defmodule D1 do
     |> File.read!()
     |> String.split("\n")
     |> Enum.map(fn line ->
-      digit(line) * 10 + digit(String.reverse(line))
+      ldigit(line) * 10 + rdigit(String.reverse(line))
     end)
     |> Enum.sum()
   end
 
-  def digit("one" <> _), do: 1
-  def digit("two" <> _), do: 2
-  def digit("three" <> _), do: 3
-  def digit("four" <> _), do: 4
-  def digit("five" <> _), do: 5
-  def digit("six" <> _), do: 6
-  def digit("seven" <> _), do: 7
-  def digit("eight" <> _), do: 8
-  def digit("nine" <> _), do: 9
-  def digit("zero" <> _), do: 0
-  def digit("eno" <> _), do: 1
-  def digit("owt" <> _), do: 2
-  def digit("eerht" <> _), do: 3
-  def digit("ruof" <> _), do: 4
-  def digit("evif" <> _), do: 5
-  def digit("xis" <> _), do: 6
-  def digit("neves" <> _), do: 7
-  def digit("thgie" <> _), do: 8
-  def digit("enin" <> _), do: 9
-  def digit("orez" <> _), do: 0
-  def digit("0" <> _), do: 0
-  def digit("1" <> _), do: 1
-  def digit("2" <> _), do: 2
-  def digit("3" <> _), do: 3
-  def digit("4" <> _), do: 4
-  def digit("5" <> _), do: 5
-  def digit("6" <> _), do: 6
-  def digit("7" <> _), do: 7
-  def digit("8" <> _), do: 8
-  def digit("9" <> _), do: 9
-  def digit(<<_, s::binary>>), do: digit(s)
+  defp ldigit("one" <> _), do: 1
+  defp ldigit("two" <> _), do: 2
+  defp ldigit("three" <> _), do: 3
+  defp ldigit("four" <> _), do: 4
+  defp ldigit("five" <> _), do: 5
+  defp ldigit("six" <> _), do: 6
+  defp ldigit("seven" <> _), do: 7
+  defp ldigit("eight" <> _), do: 8
+  defp ldigit("nine" <> _), do: 9
+  defp ldigit("zero" <> _), do: 0
+  defp ldigit(<<c>> <> _) when c >= ?0 and c <= ?9, do: c - ?0
+  defp ldigit(<<_, s::binary>>), do: ldigit(s)
+
+  defp rdigit("eno" <> _), do: 1
+  defp rdigit("owt" <> _), do: 2
+  defp rdigit("eerht" <> _), do: 3
+  defp rdigit("ruof" <> _), do: 4
+  defp rdigit("evif" <> _), do: 5
+  defp rdigit("xis" <> _), do: 6
+  defp rdigit("neves" <> _), do: 7
+  defp rdigit("thgie" <> _), do: 8
+  defp rdigit("enin" <> _), do: 9
+  defp rdigit("orez" <> _), do: 0
+  defp rdigit(<<c>> <> _) when c >= ?0 and c <= ?9, do: c - ?0
+  defp rdigit(<<_, s::binary>>), do: rdigit(s)
 end
