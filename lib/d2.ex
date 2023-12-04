@@ -32,31 +32,19 @@ defmodule D2 do
   end
 
   defp parse_game(game) do
-    ["Game " <> id, str] = String.split(game, ":")
-    sets = String.split(str, ";")
+    ["Game " <> id | sets] = String.split(game, [":", ";"])
 
     parsed_sets =
       sets
       |> Enum.map(fn set ->
-        red =
-          case Regex.named_captures(~r/(?<red>[0-9]*) red/, set) do
+        ["red", "blue", "green"]
+        |> Enum.map(fn color ->
+          case Regex.named_captures(~r/(?<#{color}>[0-9]*) #{color}/, set) do
             nil -> 0
-            c -> String.to_integer(c["red"])
+            %{^color => count} -> String.to_integer(count)
           end
-
-        blue =
-          case Regex.named_captures(~r/(?<blue>[0-9]*) blue/, set) do
-            nil -> 0
-            c -> String.to_integer(c["blue"])
-          end
-
-        green =
-          case Regex.named_captures(~r/(?<green>[0-9]*) green/, set) do
-            nil -> 0
-            c -> String.to_integer(c["green"])
-          end
-
-        {red, blue, green}
+        end)
+        |> List.to_tuple()
       end)
 
     {String.to_integer(id), parsed_sets}
