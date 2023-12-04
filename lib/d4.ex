@@ -36,24 +36,22 @@ defmodule D4 do
     file
     |> scratchcards()
     |> Enum.reduce(%{}, fn {id, _} = scratchcard, acc ->
-      id_count = Map.get(acc, id, 0)
-      id_count = id_count + 1
+      id_count = Map.get(acc, id, 0) + 1
       acc = Map.put(acc, id, id_count)
       copies = copies(scratchcard)
-        Enum.reduce(copies, acc, fn copy_id, acc2 ->
-          copy_id_count = Map.get(acc2, copy_id, 0)
-          Map.put(acc2, copy_id, copy_id_count + id_count)
-        end)
+
+      Enum.reduce(copies, acc, fn copy_id, acc2 ->
+        copy_id_count = Map.get(acc2, copy_id, 0)
+        Map.put(acc2, copy_id, copy_id_count + id_count)
+      end)
     end)
     |> Enum.map(fn {_, count} -> count end)
     |> Enum.sum()
   end
 
-  defp copies({_, 0}), do: []
-  defp copies({id, matching}) when is_list(matching) do
-    copies({id, Enum.count(matching)})
-  end
-  defp copies({id, count}) do
-    id+1..id+count |> Enum.to_list
+  defp copies({_, []}), do: []
+
+  defp copies({id, matching}) do
+    (id + 1)..(id + Enum.count(matching)) |> Enum.to_list()
   end
 end
